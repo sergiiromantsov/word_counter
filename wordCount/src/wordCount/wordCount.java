@@ -69,7 +69,8 @@ public class wordCount
 				}
 			}
 			
-			print_result( tree_map, words_to_print );
+			List<Map.Entry<String, Integer>> sorted_data = sort_map( tree_map );
+			print_result( sorted_data, words_to_print );
 		}
 		catch ( FileNotFoundException e )
 		{
@@ -101,7 +102,7 @@ public class wordCount
 	{
 		List<Map.Entry<String, Integer>> list =
             new LinkedList<Map.Entry< String, Integer >>( map.entrySet() );
-		
+
 		Collections.sort( list, new Comparator<Map.Entry< String, Integer >>()
 			{
 				public int compare(Map.Entry<String, Integer> o1,
@@ -112,29 +113,28 @@ public class wordCount
 					return result * -1;
 				}
 			});
-		
+
 		return list;
 	}
 
 
-	private static void print_result( Map<String, Integer> map, int count )
+	private static void print_result( List<Map.Entry<String, Integer>> sorted_data, int count )
 	{
-		List<Map.Entry<String, Integer>> list = sort_map( map );
-		Iterator<Entry<String, Integer>> it = list.iterator();
-
-		boolean to_print = true;
-		int counter      = count;
-		while (it.hasNext() && to_print)
+		if (count <= 0)
 		{
-			Entry<String, Integer> entry = it.next();
-			int value = entry.getValue().intValue();
-			System.out.println( entry.toString() );
-			to_print = value >= count ? --counter > 0 : true;
+			System.out.println( "Sorry, nothing to print" );
+			return;
+		}
+
+		Iterator<Entry<String, Integer>> it = sorted_data.iterator();
+		while (it.hasNext() && count-- > 0)
+		{
+			System.out.println( it.next().toString() );
 		}
 	}
 
 
 	private final static String _delimiter_l1 = "[^a-zA-Z0-9]+";
 	private final static String _delimiter_l2 = "^[-]+|[-]+$|^[']+|[']+$";
-	
+
 }
